@@ -14,16 +14,23 @@ import { configValidationSchema } from './confing.schema';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configServices: ConfigService) => ({
-        type: 'mysql',
-        autoLoadEntities: true,
-        synchronize: true,
-        host: configServices.get('DB_HOST'),
-        port: configServices.get('DB_PORT'),
-        database: configServices.get('DB_DATABASE'),
-        username: configServices.get('DB_USERNAME'),
-        password: configServices.get('DB_PASSWORD'),
-      }),
+      useFactory: async (configServices: ConfigService) => {
+        const isProduction = configServices.get('STAGE') === 'prod';
+        return {
+          ssl: isProduction,
+          extra: {
+            ssl: isProduction ? { rejectUnauthorized: false } : null,
+          },
+          type: 'mysql',
+          autoLoadEntities: true,
+          synchronize: true,
+          host: configServices.get('DB_HOST'),
+          port: configServices.get('DB_PORT'),
+          database: configServices.get('DB_DATABASE'),
+          username: configServices.get('DB_USERNAME'),
+          password: configServices.get('DB_PASSWORD'),
+        };
+      },
     }),
     AuthModule,
   ],
