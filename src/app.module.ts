@@ -22,7 +22,7 @@ import { configValidationSchema } from './confing.schema';
         port: configServices.get('DB_PORT'),
         database: configServices.get('DB_DATABASE'),
         username: configServices.get('DB_USERNAME'),
-        password: '',
+        password: configServices.get('DB_PASSWORD'),
       }),
     }),
     AuthModule,
