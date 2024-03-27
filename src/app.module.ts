@@ -15,12 +15,7 @@ import { configValidationSchema } from './confing.schema';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configServices: ConfigService) => {
-        const isProduction = configServices.get('STAGE') === 'prod';
         return {
-          ssl: isProduction,
-          extra: {
-            ssl: isProduction ? { rejectUnauthorized: false } : null,
-          },
           type: 'mysql',
           autoLoadEntities: true,
           synchronize: true,
